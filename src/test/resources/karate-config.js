@@ -54,6 +54,7 @@ if (esGitHub) {
       alwaysMatch: {
         browserName: 'chrome',
         'goog:chromeOptions': {
+           binary: karate.properties['chrome.path'],
           args: [
             '--headless=new',
             '--no-sandbox',

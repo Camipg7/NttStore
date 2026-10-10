@@ -22,22 +22,28 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Instalar Chrome y ChromeDriver
+      
+      - name: Instalar Chrome y ChromeDriver compatibles
         id: chrome
         uses: browser-actions/setup-chrome@v2
         with:
+          chrome-version: stable
           install-chromedriver: true
           install-dependencies: true
 
+
+      
       - name: Ejecutar regresion Karate
         env:
           STORE_USER: ${{ secrets.STORE_USER }}
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           DRIVER_PATH: ${{ steps.chrome.outputs.chromedriver-path }}
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
         run: |
           mvn -B clean test \
             -Dci=true \
             -Dwebdriver.path="$DRIVER_PATH" \
+            -Dchrome.path="$CHROME_PATH" \
             -Dstore.user="$STORE_USER" \
             -Dstore.password="$STORE_PASSWORD"
 
