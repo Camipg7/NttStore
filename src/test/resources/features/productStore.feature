@@ -1,4 +1,3 @@
-
 Feature: Product - Store
 
   Background:
