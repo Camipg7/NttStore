@@ -36,11 +36,37 @@ function fn() {
         }
     };
 
-    karate.configure('driver', {
-        type: 'chromedriver',
-        executable: 'C:/tools/chromedriver/chromedriver.exe',
-        headless: false
-    });
+    var esGitHub = karate.properties['ci'] == 'true';
+
+var rutaDriver = esGitHub
+  ? karate.properties['webdriver.path']
+  : 'C:/tools/chromedriver/chromedriver.exe';
+
+var opcionesDriver = {
+  type: 'chromedriver',
+  executable: rutaDriver,
+  headless: esGitHub
+};
+
+if (esGitHub) {
+  opcionesDriver.webDriverSession = {
+    capabilities: {
+      alwaysMatch: {
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          args: [
+            '--headless=new',
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--window-size=1920,1080'
+          ]
+        }
+      }
+    }
+  };
+}
+
+karate.configure('driver', opcionesDriver);
 
     karate.configure('retry', {
         count: 10,
